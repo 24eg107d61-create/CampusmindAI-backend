@@ -1,0 +1,45 @@
+
+# Maven build output
+target/
+build/
+
+# Maven wrapper
+.mvn/wrapper/maven-wrapper.jar
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Local configuration containing secrets
+application-local.properties
+application-local.yml
+application-local.yaml
+application-secret.properties
+application-secret.yml
+application-secret.yaml
+
+# Logs
+logs/
+*.log
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+.classpath
+.project
+.settings/
+.sts4-cache/
+.apt_generated
+.factorypath
+.springBeans
+
+# Operating system files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Temporary files
+*.tmp
+*.temp

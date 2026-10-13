@@ -1,3 +1,4 @@
+
 package com.campusmind.backend.service;
 
 import java.nio.charset.StandardCharsets;
@@ -5,31 +6,29 @@ import java.util.Date;
 
 import javax.crypto.SecretKey;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
 @Service
 public class JwtService {
 
-    private static final String SECRET_KEY =
-            "CampusMindSecretKeyForJWTAuthentication2026";
+    private final SecretKey secretKey;
 
     private static final long EXPIRATION_TIME =
             1000L * 60 * 60; // 1 hour
 
-    private final SecretKey secretKey;
-
-    public JwtService() {
+    public JwtService(@Value("${jwt.secret}") String secret) {
         this.secretKey = Keys.hmacShaKeyFor(
-                SECRET_KEY.getBytes(StandardCharsets.UTF_8)
+                secret.getBytes(StandardCharsets.UTF_8)
         );
     }
 
     // Generate JWT token
     public String generateToken(String email) {
-
         return Jwts.builder()
                 .subject(email)
                 .issuedAt(new Date())
@@ -42,7 +41,6 @@ public class JwtService {
 
     // Extract email from JWT
     public String extractEmail(String token) {
-
         return Jwts.parser()
                 .verifyWith(secretKey)
                 .build()
@@ -53,7 +51,6 @@ public class JwtService {
 
     // Validate JWT
     public boolean isTokenValid(String token) {
-
         try {
             Jwts.parser()
                     .verifyWith(secretKey)
@@ -61,8 +58,7 @@ public class JwtService {
                     .parseSignedClaims(token);
 
             return true;
-
-        } catch (Exception e) {
+        } catch (JwtException | IllegalArgumentException e) {
             return false;
         }
     }
